@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/aluraflixdb?createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: root
+    password:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+  flyway:
+    locations:
+      - classpath:db/migration
+      - classpath:db/testdata
+    enabled: true
+    schemas: aluraflixdb
+    baseline-on-migrate: true
