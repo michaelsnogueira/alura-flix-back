@@ -1,33 +1,35 @@
 package com.br.nogueira.aluraflixback.api.domain.model;
 
+import com.br.nogueira.aluraflixback.core.validation.Cor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
-public class Video {
+public class Categoria {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "Não pode ser vazio ou nulo")
     private String titulo;
 
-    @NotBlank(message = "Não pode ser vazio ou nulo")
-    private String descricao;
+    @Cor()
+    private String cor;
 
-    @NotBlank(message = "Não pode ser vazio ou nulo")
-    private String url;
-
-    @ManyToOne
-    private Categoria categoria;
+    @JsonIgnore
+    @OneToMany(mappedBy = "categoria")
+    private List<Video> videos;
 
 }

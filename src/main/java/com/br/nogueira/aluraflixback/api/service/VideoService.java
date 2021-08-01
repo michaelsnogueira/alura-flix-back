@@ -29,4 +29,8 @@ public class VideoService {
     public void deletar(Long id) {
         videoRepository.deleteById(id);
     }
+
+    public List<Video> buscarPorNome(String search) {
+        return videoRepository.findByTitulo(search);
+    }
 }

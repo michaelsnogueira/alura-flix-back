@@ -29,6 +29,11 @@ public class VideoController {
         Video videoBanco = videoService.buscar(id);
         return ResponseEntity.ok(videoBanco);
     }
+    @GetMapping("consultar-por-titulo")
+    public ResponseEntity<?> buscaVideosPorNome(@RequestParam String search) {
+        List<Video> videosBanco = videoService.buscarPorNome(search);
+        return ResponseEntity.ok(videosBanco);
+    }
 
     @PostMapping
     public ResponseEntity<Video> salvar(@RequestBody @Valid Video video) {

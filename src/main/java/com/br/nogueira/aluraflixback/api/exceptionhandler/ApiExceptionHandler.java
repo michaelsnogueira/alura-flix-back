@@ -1,6 +1,8 @@
 package com.br.nogueira.aluraflixback.api.exceptionhandler;
 
+import com.br.nogueira.aluraflixback.api.domain.exception.EntidadeNaoEncontradaException;
 import com.br.nogueira.aluraflixback.api.domain.exception.VideoNaoEncontradoException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,8 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(VideoNaoEncontradoException.class)
-    public ResponseEntity<?> handleEntidadeNaoEncontrada(VideoNaoEncontradoException e, WebRequest request) {
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException e, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
 
         BodyProblem bodyProblem = BodyProblem.builder()
@@ -27,6 +29,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .type("Recurso não encontrado")
                 .build();
 
+        return handleExceptionInternal(e, bodyProblem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException e, WebRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+
+        BodyProblem bodyProblem = BodyProblem.builder()
+                .detail("Não é possível deletar o registro pois o mesmo encontra-se em uso em outra tabela")
+                .title("ERROR-CONSTRAINT")
+                .status(status.value())
+                .type("Erro de constaint")
+                .build();
         return handleExceptionInternal(e, bodyProblem, new HttpHeaders(), status, request);
     }
 
@@ -41,7 +56,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         BodyProblem bodyProblem = BodyProblem.builder()
                 .detail("Um ou mais campos estão inválidos")
-                .title(status.getReasonPhrase())
+                .title("CAMPOS-INVÁLIDOS")
                 .status(status.value())
                 .type("Campos").fields(fields)
                 .build();

@@ -1,6 +1,6 @@
 package com.br.nogueira.aluraflixback.api.domain.exception;
 
-public class VideoNaoEncontradoException extends RuntimeException {
+public class VideoNaoEncontradoException extends EntidadeNaoEncontradaException {
     public VideoNaoEncontradoException(String message) {
         super(message);
     }
